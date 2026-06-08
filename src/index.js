@@ -1,5 +1,3 @@
-import "@/styles/global.css";
-
 export { Button } from "@/components/atoms/button";
 export { Badge } from "@/components/atoms/badge";
 export { Media } from "@/components/molecules/media";

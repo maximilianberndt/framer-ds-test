@@ -16,14 +16,19 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
     lib: {
-      entry: path.resolve(__dirname, "src/index.js"),
-      name: "FramerDsTest",
+      entry: {
+        "framer-ds-test": path.resolve(__dirname, "src/index.js"),
+        styles: path.resolve(__dirname, "src/styles.js"),
+      },
       formats: ["es"],
-      fileName: () => "framer-ds-test.js",
     },
     rollupOptions: {
       external: ["react", "react-dom", "react/jsx-runtime"],
+      treeshake: {
+        moduleSideEffects: (id) => id.includes("global.css") || id.endsWith(".css"),
+      },
       output: {
+        entryFileNames: "[name].js",
         assetFileNames: "style.css",
       },
     },

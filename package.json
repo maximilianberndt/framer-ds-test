@@ -13,6 +13,15 @@
   "license": "ISC",
   "author": "",
   "type": "module",
+  "exports": {
+    ".": "./dist/framer-ds-test.js",
+    "./styles": "./dist/styles.js",
+    "./style.css": "./dist/style.css"
+  },
+  "sideEffects": [
+    "dist/styles.js",
+    "**/*.css"
+  ],
   "framer": {
     "ref": "main"
   },

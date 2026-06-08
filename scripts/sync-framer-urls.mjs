@@ -16,7 +16,32 @@ const dsRef = pkg.framer?.ref ?? "main";
 // jsDelivr serves raw CSS reliably; esm.sh is used for the JS bundle
 const styleUrl = `https://cdn.jsdelivr.net/gh/${githubRepo}@${dsRef}/dist/style.css`;
 const packageUrl = `https://esm.sh/gh/${githubRepo}@${dsRef}/dist/framer-ds-test.js?external=react,react-dom`;
-const loadStylesUrl = `https://esm.sh/gh/${githubRepo}@${dsRef}/src/framer/load-styles.js?external=react`;
+const stylesEntryUrl = `https://esm.sh/gh/${githubRepo}@${dsRef}/dist/styles.js`;
+const framerStylesUrl = `https://esm.sh/gh/${githubRepo}@${dsRef}/src/framer/styles.js?external=react`;
+
+const styleUrlExport = `export const STYLE_URL = "${styleUrl}";`;
+
+function syncStyleUrlExport(filePath) {
+  const content = readFileSync(filePath, "utf8");
+  const updated = content.replace(
+    /export const STYLE_URL =\n?  "https:\/\/[^"]+";/,
+    styleUrlExport,
+  );
+  writeFileSync(filePath, updated);
+}
+
+syncStyleUrlExport(join(root, "src/styles.js"));
+syncStyleUrlExport(join(root, "src/framer/styles.js"));
+
+const distStylesPath = join(root, "dist/styles.js");
+try {
+  const distStyles = readFileSync(distStylesPath, "utf8");
+  if (!distStyles.startsWith('import "./style.css"')) {
+    writeFileSync(distStylesPath, `import "./style.css";\n\n${distStyles}`);
+  }
+} catch {
+  // dist/styles.js is created by build:lib before sync:framer runs
+}
 
 const urlsPath = join(root, "src/framer/urls.js");
 const urlsContent = `// Auto-synced — do not edit manually (run: pnpm sync:framer)
@@ -24,7 +49,8 @@ export const DS_GITHUB_REPO = "${githubRepo}";
 export const DS_REF = "${dsRef}";
 export const DS_STYLE_URL = "${styleUrl}";
 export const DS_PACKAGE_URL = "${packageUrl}";
-export const DS_LOAD_STYLES_URL = "${loadStylesUrl}";
+export const DS_STYLES_ENTRY_URL = "${stylesEntryUrl}";
+export const DS_FRAMER_STYLES_URL = "${framerStylesUrl}";
 `;
 
 writeFileSync(urlsPath, urlsContent);
@@ -44,7 +70,7 @@ function findFramerIndexFiles(dir, files = []) {
 const importBlock = `// Framer code component — URLs synced from src/framer/urls.js (run: pnpm sync:framer)
 // Copy into Framer (Assets → Code → +)
 
-import { useLoadDsStyles } from "${loadStylesUrl}";
+import { useDsStyles } from "${framerStylesUrl}";
 `;
 
 const framerFiles = findFramerIndexFiles(join(root, "src/components"));
@@ -59,7 +85,7 @@ for (const filePath of framerFiles) {
     "",
   );
   content = content.replace(
-    /^import \{ useLoadDsStyles \} from "https:\/\/esm\.sh\/[^"]+";\n/m,
+    /^import \{ use(?:Load)?DsStyles(?:, [^}]+)? \} from "https:\/\/esm\.sh\/[^"]+";\n/m,
     "",
   );
 
@@ -76,16 +102,15 @@ for (const filePath of framerFiles) {
   // Prepend header + load-styles import
   content = importBlock + content;
 
-  // Inject useLoadDsStyles at the start of the default export function body
-  if (!content.includes("useLoadDsStyles(")) {
+  // Inject useDsStyles at the start of the default export function body
+  if (!content.includes("useDsStyles()")) {
+    content = content.replace(
+      /useLoadDsStyles\("https:\/\/[^"]+"\);\n/,
+      "",
+    );
     content = content.replace(
       /(export default function \w+\([^)]*\) \{)\n/,
-      `$1\n  useLoadDsStyles("${styleUrl}");\n`,
-    );
-  } else {
-    content = content.replace(
-      /useLoadDsStyles\("https:\/\/[^"]+"\)/,
-      `useLoadDsStyles("${styleUrl}")`,
+      `$1\n  useDsStyles();\n`,
     );
   }
 
@@ -106,14 +131,32 @@ framerDts = framerDts.replace(
   `declare module "${packageUrl}"`,
 );
 
-if (!framerDts.includes(loadStylesUrl)) {
+framerDts = framerDts.replace(
+  /declare module "https:\/\/esm\.sh\/[^"]+\/src\/framer\/(?:load-styles|styles)\.js\?external=react" \{[\s\S]*?\}\n\n/,
+  "",
+);
+
+if (!framerDts.includes(framerStylesUrl)) {
   framerDts = framerDts.replace(
     /declare module "framer"/,
-    `declare module "${loadStylesUrl}" {
+    `declare module "${framerStylesUrl}" {
+  export const STYLE_URL: string;
+  export function useDsStyles(): void;
   export function useLoadDsStyles(href: string): void;
 }
 
 declare module "framer"`,
+  );
+}
+
+if (!framerDts.includes(stylesEntryUrl)) {
+  framerDts = framerDts.replace(
+    /declare module "https:\/\/cdn\.jsdelivr\.net/,
+    `declare module "${stylesEntryUrl}" {
+  export const STYLE_URL: string;
+}
+
+declare module "https://cdn.jsdelivr.net`,
   );
 }
 
