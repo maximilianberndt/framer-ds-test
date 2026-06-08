@@ -18,6 +18,16 @@ jobs:
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
+          always-auth: true
+
+      - name: Check npm auth is configured
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "::error::NPM_TOKEN secret is missing. Add an npm Automation/Publish token at Settings → Secrets → Actions."
+            exit 1
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - run: pnpm install --frozen-lockfile
 
