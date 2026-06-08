@@ -80,23 +80,16 @@ Then set `"framer": { "ref": "v0.1.1" }` in `package.json` and run `pnpm sync:fr
 Each component folder contains a `framer.index.jsx` that imports from esm.sh via GitHub:
 
 ```jsx
+import { useDsStyles } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/styles.js?external=react";
 import { Badge } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/framer-ds-test.js?external=react,react-dom";
 
 export default function Badge(props) {
+  useDsStyles();
   // ...
 }
 ```
 
-Load styles once globally in Framer (Site Settings → Custom Code → `<link>` in head):
-
-```html
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/maximilianberndt/framer-ds-test@main/dist/style.css"
-/>
-```
-
-Optional per-component loading is still available via `src/framer/styles.js` (`useDsStyles`) if you prefer not to use a global `<link>`.
+`useDsStyles()` injects the stylesheet via JavaScript so styles appear in the **Framer editor**. A global `<link>` in Site Settings → Custom Code only runs on the **published site** — you can keep both; the hook dedupes and only adds one `<link>`.
 
 ### Setup steps
 
@@ -108,4 +101,4 @@ After changes, run `pnpm release`, commit, and push — Framer picks up updates 
 
 ### CSS note
 
-`dist/` must be committed and pushed to GitHub. In Framer, load `dist/style.css` via a global `<link>` tag (or `useDsStyles()` from `src/framer/styles.js` as an alternative).
+`dist/` must be committed and pushed to GitHub. Use `useDsStyles()` in code components for editor preview; an optional global `<link>` to `dist/style.css` covers the published site.

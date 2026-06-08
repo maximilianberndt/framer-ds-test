@@ -1,6 +1,7 @@
 // Framer code component — URLs synced from src/framer/urls.js (run: pnpm sync:framer)
 // Copy into Framer (Assets → Code → +)
 
+import { useDsStyles } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/styles.js?external=react";
 import { Media as DSMedia } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/framer-ds-test.js?external=react,react-dom";
 import { ControlType, addPropertyControls } from "framer";
 
@@ -11,6 +12,7 @@ import { ControlType, addPropertyControls } from "framer";
  * @framerSupportedLayoutHeight any-prefer-fixed
  */
 export default function Media(props) {
+  useDsStyles();
   const {
     image = {
       src: "https://framerusercontent.com/images/GfGkADagM4KEibNcIiRUWlfrR0.jpg",

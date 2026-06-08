@@ -70,6 +70,7 @@ function findFramerIndexFiles(dir, files = []) {
 const importBlock = `// Framer code component — URLs synced from src/framer/urls.js (run: pnpm sync:framer)
 // Copy into Framer (Assets → Code → +)
 
+import { useDsStyles } from "${framerStylesUrl}";
 `;
 
 const framerFiles = findFramerIndexFiles(join(root, "src/components"));
@@ -110,8 +111,15 @@ for (const filePath of framerFiles) {
     },
   );
 
-  // Prepend header
+  // Prepend header + styles hook (needed in the Framer editor; global <link> is publish-only)
   content = importBlock + content;
+
+  if (!content.includes("useDsStyles()")) {
+    content = content.replace(
+      /(export default function \w+\([^)]*\) \{)\n/,
+      `$1\n  useDsStyles();\n`,
+    );
+  }
 
   writeFileSync(filePath, content);
   console.log(`synced ${relative(root, filePath)}`);
