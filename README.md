@@ -69,9 +69,16 @@ Then set `"framer": { "ref": "v0.1.1" }` in `package.json` and run `pnpm sync:fr
 Each component folder contains a `framer.index.jsx` that imports from esm.sh via GitHub:
 
 ```jsx
-import "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/style.css";
+import { useLoadDsStyles } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/load-styles.js?external=react";
 import { Badge } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/framer-ds-test.js?external=react,react-dom";
+
+export default function Badge(props) {
+  useLoadDsStyles("https://cdn.jsdelivr.net/gh/maximilianberndt/framer-ds-test@main/dist/style.css");
+  // ...
+}
 ```
+
+Framer does not apply `import "…/style.css"` side-effects — styles are injected via `<link>` in `useLoadDsStyles`.
 
 ### Setup steps
 
@@ -83,4 +90,4 @@ After changes, run `pnpm release`, commit, and push — Framer picks up updates 
 
 ### CSS note
 
-Styles only apply when the wrapper imports `style.css`. If the esm.sh CSS import fails in Framer, inject a `<link>` tag pointing at the same GitHub path via esm.sh instead.
+`dist/style.css` must be committed and pushed to GitHub. Styles are loaded via `useLoadDsStyles()` which injects a jsDelivr `<link>` tag — do not rely on `import "…/style.css"`.

@@ -2,6 +2,10 @@
  * Ambient types for Framer code components.
  * The `framer` module is provided by the Framer runtime — not installed in this repo.
  */
+declare module "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/load-styles.js?external=react" {
+  export function useLoadDsStyles(href: string): void;
+}
+
 declare module "framer" {
   import type { ComponentType } from "react";
 
@@ -37,7 +41,7 @@ declare module "framer" {
   export function useIsStaticRenderer(): boolean;
 }
 
-declare module "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/style.css";
+declare module "https://cdn.jsdelivr.net/gh/maximilianberndt/framer-ds-test@main/dist/style.css";
 
 declare module "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/framer-ds-test.js?external=react,react-dom" {
   import type { ComponentType, ReactNode } from "react";
