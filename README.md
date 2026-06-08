@@ -80,16 +80,33 @@ Then set `"framer": { "ref": "v0.1.1" }` in `package.json` and run `pnpm sync:fr
 Each component folder contains a `framer.index.jsx` that imports from esm.sh via GitHub:
 
 ```jsx
-import { useDsStyles } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/styles.js?external=react";
+import { DsStylesheet } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/styles.js?external=react";
 import { Badge } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/framer-ds-test.js?external=react,react-dom";
 
 export default function Badge(props) {
-  useDsStyles();
-  // ...
+  return (
+    <>
+      <DsStylesheet />
+      {/* ... */}
+    </>
+  );
 }
 ```
 
-`useDsStyles()` injects the stylesheet via JavaScript so styles appear in the **Framer editor**. A global `<link>` in Site Settings → Custom Code only runs on the **published site** — you can keep both; the hook dedupes and only adds one `<link>`.
+`<DsStylesheet />` renders a `<link>` to the esm.sh CSS URL so styles appear in the **Framer editor**. A global `<link>` in Site Settings → Custom Code only runs on the **published site** — you can keep both.
+
+### esm.sh CSS
+
+esm.sh's `?css` shortcut (e.g. `monaco-editor?css`) redirects to CSS when the **package main entry** imports CSS in JS. For this repo, use the `./style.css` export instead:
+
+```html
+<link
+  rel="stylesheet"
+  href="https://esm.sh/gh/maximilianberndt/framer-ds-test@main/style.css"
+/>
+```
+
+`dist/styles.js?css` returns JavaScript, not CSS. A JS `import "…/styles.js"` side-effect also does not work in Framer code components. In components, render `<DsStylesheet />` from `src/framer/styles.js`.
 
 ### Setup steps
 
@@ -101,4 +118,4 @@ After changes, run `pnpm release`, commit, and push — Framer picks up updates 
 
 ### CSS note
 
-`dist/` must be committed and pushed to GitHub. Use `useDsStyles()` in code components for editor preview; an optional global `<link>` to `dist/style.css` covers the published site.
+`dist/` must be committed and pushed to GitHub. Use `<DsStylesheet />` in code components for editor preview; an optional global `<link>` to `dist/style.css` covers the published site.

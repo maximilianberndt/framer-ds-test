@@ -1,7 +1,7 @@
 // Framer code component — URLs synced from src/framer/urls.js (run: pnpm sync:framer)
 // Copy into Framer (Assets → Code → +)
 
-import { useDsStyles } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/styles.js?external=react";
+import { DsStylesheet } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/styles.js?external=react";
 import { ProjectCard as DSProjectCard } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/framer-ds-test.js?external=react,react-dom";
 import { ControlType, addPropertyControls } from "framer";
 
@@ -12,7 +12,6 @@ import { ControlType, addPropertyControls } from "framer";
  * @framerSupportedLayoutHeight auto
  */
 export default function ProjectCard(props) {
-  useDsStyles();
   const {
     title,
     description,
@@ -25,7 +24,7 @@ export default function ProjectCard(props) {
   } = props;
 
   return (
-    <div style={{ position: "relative", ...style }}>
+      <div style={{ position: "relative", ...style }}>
       <DSProjectCard
         title={title}
         description={description}
@@ -33,6 +32,7 @@ export default function ProjectCard(props) {
         link={link ? { href: link, target: "_self" } : undefined}
       />
     </div>
+    </>
   );
 }
 

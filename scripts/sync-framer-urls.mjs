@@ -13,13 +13,15 @@ const githubRepo =
   "maximilianberndt/framer-ds-test";
 const dsRef = pkg.framer?.ref ?? "main";
 
-// jsDelivr serves raw CSS reliably; esm.sh is used for the JS bundle
+// esm.sh serves CSS via the package.json "./style.css" export; jsDelivr is a fallback
+const styleEsmUrl = `https://esm.sh/gh/${githubRepo}@${dsRef}/style.css`;
 const styleUrl = `https://cdn.jsdelivr.net/gh/${githubRepo}@${dsRef}/dist/style.css`;
 const packageUrl = `https://esm.sh/gh/${githubRepo}@${dsRef}/dist/framer-ds-test.js?external=react,react-dom`;
 const stylesEntryUrl = `https://esm.sh/gh/${githubRepo}@${dsRef}/dist/styles.js`;
 const framerStylesUrl = `https://esm.sh/gh/${githubRepo}@${dsRef}/src/framer/styles.js?external=react`;
 
-const styleUrlExport = `export const STYLE_URL = "${styleUrl}";`;
+const styleUrlExport = `export const STYLE_URL = "${styleEsmUrl}";
+export const STYLE_CDN_URL = "${styleUrl}";`;
 
 function syncStyleUrlExport(filePath) {
   const content = readFileSync(filePath, "utf8");
@@ -47,6 +49,7 @@ const urlsPath = join(root, "src/framer/urls.js");
 const urlsContent = `// Auto-synced — do not edit manually (run: pnpm sync:framer)
 export const DS_GITHUB_REPO = "${githubRepo}";
 export const DS_REF = "${dsRef}";
+export const DS_STYLE_ESM_URL = "${styleEsmUrl}";
 export const DS_STYLE_URL = "${styleUrl}";
 export const DS_PACKAGE_URL = "${packageUrl}";
 export const DS_STYLES_ENTRY_URL = "${stylesEntryUrl}";
@@ -70,8 +73,39 @@ function findFramerIndexFiles(dir, files = []) {
 const importBlock = `// Framer code component — URLs synced from src/framer/urls.js (run: pnpm sync:framer)
 // Copy into Framer (Assets → Code → +)
 
-import { useDsStyles } from "${framerStylesUrl}";
+import { DsStylesheet } from "${framerStylesUrl}";
 `;
+
+function stripDsStylesheet(content) {
+  return content
+    .replace(
+      /^import \{ DsStylesheet \} from "https:\/\/esm\.sh\/[^"]+";\n/m,
+      "",
+    )
+    .replace(/      <DsStylesheet \/>\n/g, "")
+    .replace(/    <>\n/g, "")
+    .replace(/    <\/>\n(?=  \);)/g, "");
+}
+
+function injectDsStylesheet(content) {
+  if (content.includes("<DsStylesheet />")) return content;
+
+  const singleLineReturn = content.match(/  return (<.+>);\n\}/);
+  if (singleLineReturn) {
+    return content.replace(
+      /  return (<.+>);\n\}/,
+      "  return (\n    <>\n      <DsStylesheet />\n      $1\n    </>\n  );\n}",
+    );
+  }
+
+  return content.replace(
+    /  return \(\n    (<)/,
+    "  return (\n    <>\n      <DsStylesheet />\n      $1",
+  ).replace(
+    /(\n  \);\n\}\n\naddPropertyControls)/,
+    "\n    </>\n  );\n}\n\naddPropertyControls",
+  );
+}
 
 const framerFiles = findFramerIndexFiles(join(root, "src/components"));
 
@@ -85,9 +119,10 @@ for (const filePath of framerFiles) {
     "",
   );
   content = content.replace(
-    /^import \{ use(?:Load)?DsStyles(?:, [^}]+)? \} from "https:\/\/esm\.sh\/[^"]+";\n/m,
+    /^import \{ (?:use(?:Load)?DsStyles|DsStylesheet)(?:, [^}]+)? \} from "https:\/\/esm\.sh\/[^"]+";\n/m,
     "",
   );
+  content = stripDsStylesheet(content);
   content = content.replace(
     /  useDsStyles\(\);\n/,
     "",
@@ -111,15 +146,9 @@ for (const filePath of framerFiles) {
     },
   );
 
-  // Prepend header + styles hook (needed in the Framer editor; global <link> is publish-only)
+  // Prepend header + declarative stylesheet (needed in the Framer editor)
   content = importBlock + content;
-
-  if (!content.includes("useDsStyles()")) {
-    content = content.replace(
-      /(export default function \w+\([^)]*\) \{)\n/,
-      `$1\n  useDsStyles();\n`,
-    );
-  }
+  content = injectDsStylesheet(content);
 
   writeFileSync(filePath, content);
   console.log(`synced ${relative(root, filePath)}`);
@@ -148,6 +177,8 @@ if (!framerDts.includes(framerStylesUrl)) {
     /declare module "framer"/,
     `declare module "${framerStylesUrl}" {
   export const STYLE_URL: string;
+  export const STYLE_CDN_URL: string;
+  export function DsStylesheet(): JSX.Element;
   export function useDsStyles(): void;
   export function useLoadDsStyles(href: string): void;
 }

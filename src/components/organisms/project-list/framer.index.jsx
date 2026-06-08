@@ -1,7 +1,7 @@
 // Framer code component — URLs synced from src/framer/urls.js (run: pnpm sync:framer)
 // Copy into Framer (Assets → Code → +)
 
-import { useDsStyles } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/styles.js?external=react";
+import { DsStylesheet } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/styles.js?external=react";
 import { ProjectList as DSProjectList } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/framer-ds-test.js?external=react,react-dom";
 import { ControlType, addPropertyControls } from "framer";
 
@@ -12,13 +12,13 @@ import { ControlType, addPropertyControls } from "framer";
  * @framerSupportedLayoutHeight auto
  */
 export default function ProjectList(props) {
-  useDsStyles();
   const { heading, style } = props;
 
   return (
-    <div style={{ position: "relative", width: "100%", ...style }}>
+      <div style={{ position: "relative", width: "100%", ...style }}>
       <DSProjectList heading={heading} />
     </div>
+    </>
   );
 }
 

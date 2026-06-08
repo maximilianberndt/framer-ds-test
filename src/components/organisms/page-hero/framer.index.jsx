@@ -1,7 +1,7 @@
 // Framer code component — URLs synced from src/framer/urls.js (run: pnpm sync:framer)
 // Copy into Framer (Assets → Code → +)
 
-import { useDsStyles } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/styles.js?external=react";
+import { DsStylesheet } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/styles.js?external=react";
 import { PageHero as DSPageHero } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/framer-ds-test.js?external=react,react-dom";
 import { ControlType, addPropertyControls } from "framer";
 
@@ -12,11 +12,10 @@ import { ControlType, addPropertyControls } from "framer";
  * @framerSupportedLayoutHeight auto
  */
 export default function PageHero(props) {
-  useDsStyles();
   const { title, description, button, media, style } = props;
 
   return (
-    <div style={{ position: "relative", width: "100%", ...style }}>
+      <div style={{ position: "relative", width: "100%", ...style }}>
       <DSPageHero
         title={title}
         description={description}
@@ -24,6 +23,7 @@ export default function PageHero(props) {
         media={media}
       />
     </div>
+    </>
   );
 }
 

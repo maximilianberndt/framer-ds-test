@@ -4,6 +4,8 @@
  */
 declare module "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/styles.js?external=react" {
   export const STYLE_URL: string;
+  export const STYLE_CDN_URL: string;
+  export function DsStylesheet(): JSX.Element;
   export function useDsStyles(): void;
   export function useLoadDsStyles(href: string): void;
 }
