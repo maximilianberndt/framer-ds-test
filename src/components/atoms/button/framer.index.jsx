@@ -1,8 +1,8 @@
 // Framer code component — URLs synced from src/framer/urls.js (run: pnpm sync:framer)
 // Copy into Framer (Assets → Code → +)
 
-import "https://esm.sh/@maaax/framer-ds-test@0.1.1/style.css";
-import { Button as DSButton } from "https://esm.sh/@maaax/framer-ds-test@0.1.1?external=react,react-dom";
+import "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/style.css";
+import { Button as DSButton } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/framer-ds-test.js?external=react,react-dom";
 import { ControlType, addPropertyControls } from "framer";
 
 /**

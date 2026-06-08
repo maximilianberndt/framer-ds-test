@@ -1,6 +1,6 @@
 # framer-ds-test
 
-React design system for use in Framer via code components. Keep the source in a **private GitHub repo**, publish the built bundle to **public npm** on version tags, and import in Framer via esm.sh.
+React design system for use in Framer via code components. Source lives in a **public GitHub repo**; Framer imports the built bundle via [esm.sh GitHub URLs](https://esm.sh/#docs).
 
 ## Component structure
 
@@ -39,65 +39,48 @@ Regenerate boneyard skeleton snapshots (with dev server running):
 pnpm build:boneyard
 ```
 
-## Build the library
+## Release to Framer
+
+Build the library, sync import URLs, commit `dist/`, and push to GitHub:
 
 ```bash
-pnpm build:lib
+pnpm release
+git add dist src/framer src/components/**/framer.index.jsx src/framer.d.ts
+git commit -m "Release v0.1.1"
+git push origin main
 ```
 
-Outputs to `dist/`:
+Outputs in `dist/`:
 
-- `framer-ds-test.js` — ESM bundle (React/ReactDOM are peer deps)
+- `framer-ds-test.js` — ESM bundle (React/ReactDOM are external)
 - `style.css` — compiled Tailwind styles
 
-## Publish (push to GitHub)
-
-Publishing is automated via GitHub Actions when you push a version tag. The repo can stay private; only the built npm package is public.
-
-### One-time setup
-
-1. Create an npm account and ensure the package name `framer-ds-test` is available (or rename in `package.json`)
-2. Create an npm **Automation** or **Publish** token
-3. Add it to your GitHub repo as a secret: **Settings → Secrets → `NPM_TOKEN`**
-
-### Release a new version
+Pin a git tag to lock Framer imports to a specific release:
 
 ```bash
-pnpm version patch   # bumps version, syncs framer.index.jsx URLs, commits
-git push origin main --tags
+git tag v0.1.1
+git push origin v0.1.1
 ```
 
-GitHub Actions will build `dist/` and run `npm publish` automatically when a `v*` tag is pushed.
-
-You can also bump manually:
-
-```bash
-pnpm sync:framer     # sync URLs from package.json version
-git tag v0.1.0
-git push origin main --tags
-```
-
-### CI
-
-Every push to `main` runs lint and `build:lib` (no publish). See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
+Then set `"framer": { "ref": "v0.1.1" }` in `package.json` and run `pnpm sync:framer`.
 
 ## Use in Framer
 
-Each component folder contains a `framer.index.jsx` that imports the published package via esm.sh:
+Each component folder contains a `framer.index.jsx` that imports from esm.sh via GitHub:
 
 ```jsx
-import "https://esm.sh/framer-ds-test@0.1.0/style.css";
-import { Badge } from "https://esm.sh/framer-ds-test@0.1.0?external=react,react-dom";
+import "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/style.css";
+import { Badge } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/framer-ds-test.js?external=react,react-dom";
 ```
 
 ### Setup steps
 
-1. Push a version tag so GitHub Actions publishes to npm (see above)
+1. Make the GitHub repo public and push a build (`pnpm release` + commit `dist/`)
 2. Copy `framer.index.jsx` from a component folder into a Framer code file (Assets → Code → +)
 3. Drop the code component onto the canvas
 
-After a new release, re-copy updated wrappers or update the version in your Framer code files.
+After changes, run `pnpm release`, commit, and push — Framer picks up updates from the `@main` ref (or your pinned tag).
 
 ### CSS note
 
-Styles only apply when the wrapper imports `style.css`. If the esm.sh CSS import fails in Framer, inject a `<link>` tag pointing at `https://unpkg.com/framer-ds-test@VERSION/dist/style.css` instead.
+Styles only apply when the wrapper imports `style.css`. If the esm.sh CSS import fails in Framer, inject a `<link>` tag pointing at the same GitHub path via esm.sh instead.

@@ -1,4 +1,5 @@
-// Auto-synced from package.json — do not edit manually
-export const DS_VERSION = "0.1.1";
-export const DS_STYLE_URL = `https://esm.sh/@maaax/framer-ds-test@${DS_VERSION}/style.css`;
-export const DS_PACKAGE_URL = `https://esm.sh/@maaax/framer-ds-test@${DS_VERSION}?external=react,react-dom`;
+// Auto-synced — do not edit manually (run: pnpm sync:framer)
+export const DS_GITHUB_REPO = "maximilianberndt/framer-ds-test";
+export const DS_REF = "main";
+export const DS_STYLE_URL = "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/style.css";
+export const DS_PACKAGE_URL = "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/framer-ds-test.js?external=react,react-dom";
