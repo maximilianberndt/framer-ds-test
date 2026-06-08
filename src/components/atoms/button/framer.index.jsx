@@ -12,13 +12,7 @@ import { ControlType, addPropertyControls } from "framer";
  * @framerSupportedLayoutHeight auto
  */
 export default function Button(props) {
-  const { label, variant, style } = props;
-
-  return (
-    <div style={{ position: "relative", ...style }}>
-      <DSButton label={label} variant={variant} />
-    </div>
-  );
+  return <DSButton {...props} />;
 }
 
 addPropertyControls(Button, {
