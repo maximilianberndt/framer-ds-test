@@ -13,6 +13,8 @@ import { ControlType, addPropertyControls } from "framer";
  */
 export default function Button(props) {
   return (
+    <>
+      <DsStylesheet />
       <DSButton {...props} />
     </>
   );
