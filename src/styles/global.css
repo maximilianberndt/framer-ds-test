@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@import "./reset.css";
+@import "./utilities.css";
+@import "./variants.css";
+@import "./typography.css";
+
+@layer base {
+  @import "@blossom-carousel/core/style.css";
+}
+
+@theme {
+  --spacing: 0.0625rem;
+}

@@ -1,0 +1,29 @@
+@layer base {
+  html {
+    @apply text-[10px];
+  }
+  
+  body {
+    scrollbar-gutter: stable;
+    @apply overflow-y-scroll;
+  }
+  
+  a,
+  button {
+    @apply cursor-pointer;
+  }
+  
+  a,
+  input,
+  button {
+    @apply focus-visible:outline-none;
+  }
+  
+  img,
+  video,
+  picture {
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+  
+}

@@ -1,0 +1,3 @@
+/* Pointer detection variants */
+@custom-variant pointer (@media (hover: hover) and (pointer: fine));
+@custom-variant touch (@media (hover: none) and (pointer: coarse));
