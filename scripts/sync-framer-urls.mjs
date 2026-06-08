@@ -60,14 +60,6 @@ for (const filePath of framerFiles) {
     /^\/\/ ProjectList uses static fixture data[^\n]*\n/m,
     "// ProjectList uses static fixture data baked into the design system.\n",
   );
-  content = content.replace(
-    /^\/\/ Place a single WebglRoot[^\n]*\n/m,
-    "// Place a single WebglRoot on the page; pair with Shape components.\n",
-  );
-  content = content.replace(
-    /^\/\/ Requires WebglRoot[^\n]*\n/m,
-    "// Requires WebglRoot on the same page.\n",
-  );
 
   writeFileSync(filePath, content);
   console.log(`synced ${relative(root, filePath)}`);

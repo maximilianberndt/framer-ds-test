@@ -14,7 +14,6 @@ export default defineConfig({
     },
   },
   plugins: [react(), tailwindcss()],
-  assetsInclude: ["**/*.glb"],
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.js"),

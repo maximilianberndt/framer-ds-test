@@ -6,13 +6,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import sortImports from "@j4cobi/eslint-plugin-sort-imports";
 
 export default defineConfig([
-  globalIgnores([
-    "dist",
-    "src/lib/draco/**",
-    "src/bones/**",
-    "src/glb.d.ts",
-    "src/framer.d.ts",
-  ]),
+  globalIgnores(["dist", "src/bones/**", "src/framer.d.ts"]),
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
     extends: [

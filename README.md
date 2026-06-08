@@ -24,8 +24,6 @@ Import URLs in `framer.index.jsx` are synced from [`src/framer/urls.js`](src/fra
 | `ProjectCard` | `src/components/molecules/project-card/` | Single project card |
 | `PageHero` | `src/components/organisms/page-hero/` | Full-width hero with title, description, button slot, media slot |
 | `ProjectList` | `src/components/organisms/project-list/` | Projects carousel with static fixture data |
-| `WebglRoot` | `src/components/webgl/webgl-root/` | Shared WebGL canvas for drei View components |
-| `Shape` | `src/components/webgl/shape/` | 3D shape (sphere, box, ag-station) |
 
 ## Develop locally
 
@@ -99,8 +97,6 @@ import { Badge } from "https://esm.sh/framer-ds-test@0.1.0?external=react,react-
 3. Drop the code component onto the canvas
 
 After a new release, re-copy updated wrappers or update the version in your Framer code files.
-
-For WebGL: place one `WebglRoot` on the page, then add `Shape` instances where needed.
 
 ### CSS note
 

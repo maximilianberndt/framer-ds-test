@@ -75,10 +75,4 @@ declare module "https://esm.sh/@maaax/framer-ds-test@0.1.0?external=react,react-
   export const ProjectList: ComponentType<{
     heading?: string;
   }>;
-
-  export const WebglRoot: ComponentType<Record<string, never>>;
-
-  export const Shape: ComponentType<{
-    variant?: "sphere" | "box" | "ag-station";
-  }>;
 }
