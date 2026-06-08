@@ -15,4 +15,8 @@ export default defineConfig({
     },
   },
   plugins: [react(), tailwindcss()],
+  build: {
+    // Keep `dist/` for the Framer lib release — do not overwrite with the preview app build
+    outDir: "dist-app",
+  },
 });

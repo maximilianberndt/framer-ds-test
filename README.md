@@ -45,10 +45,12 @@ Build the library, sync import URLs, commit `dist/`, and push to GitHub:
 
 ```bash
 pnpm release
-git add dist src/framer src/components/**/framer.index.jsx src/framer.d.ts
+git add dist/
 git commit -m "Release v0.1.1"
 git push origin main
 ```
+
+`pnpm build` (preview app) outputs to `dist-app/` so it never overwrites the Framer lib in `dist/`.
 
 Outputs in `dist/`:
 
