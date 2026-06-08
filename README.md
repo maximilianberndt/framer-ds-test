@@ -80,29 +80,23 @@ Then set `"framer": { "ref": "v0.1.1" }` in `package.json` and run `pnpm sync:fr
 Each component folder contains a `framer.index.jsx` that imports from esm.sh via GitHub:
 
 ```jsx
-import { useDsStyles } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/styles.js?external=react";
 import { Badge } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/framer-ds-test.js?external=react,react-dom";
 
 export default function Badge(props) {
-  useDsStyles();
   // ...
 }
 ```
 
-Styles-only import paths:
+Load styles once globally in Framer (Site Settings → Custom Code → `<link>` in head):
 
-```jsx
-// Framer helper (recommended) — injects <link> once
-import { useDsStyles } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/styles.js?external=react";
-
-// Built styles entry — for bundlers that honor CSS side effects
-import "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/styles.js";
-
-// Raw CSS (jsDelivr)
-import "https://cdn.jsdelivr.net/gh/maximilianberndt/framer-ds-test@main/dist/style.css";
+```html
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/maximilianberndt/framer-ds-test@main/dist/style.css"
+/>
 ```
 
-Framer does not apply `import "…/style.css"` side-effects — use `useDsStyles()` from `src/framer/styles.js`.
+Optional per-component loading is still available via `src/framer/styles.js` (`useDsStyles`) if you prefer not to use a global `<link>`.
 
 ### Setup steps
 
@@ -114,4 +108,4 @@ After changes, run `pnpm release`, commit, and push — Framer picks up updates 
 
 ### CSS note
 
-`dist/` must be committed and pushed to GitHub. In Framer, load styles via `useDsStyles()` from `src/framer/styles.js` — do not rely on `import "…/style.css"` side effects there.
+`dist/` must be committed and pushed to GitHub. In Framer, load `dist/style.css` via a global `<link>` tag (or `useDsStyles()` from `src/framer/styles.js` as an alternative).

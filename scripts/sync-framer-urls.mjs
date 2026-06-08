@@ -70,7 +70,6 @@ function findFramerIndexFiles(dir, files = []) {
 const importBlock = `// Framer code component — URLs synced from src/framer/urls.js (run: pnpm sync:framer)
 // Copy into Framer (Assets → Code → +)
 
-import { useDsStyles } from "${framerStylesUrl}";
 `;
 
 const framerFiles = findFramerIndexFiles(join(root, "src/components"));
@@ -88,6 +87,18 @@ for (const filePath of framerFiles) {
     /^import \{ use(?:Load)?DsStyles(?:, [^}]+)? \} from "https:\/\/esm\.sh\/[^"]+";\n/m,
     "",
   );
+  content = content.replace(
+    /  useDsStyles\(\);\n/,
+    "",
+  );
+  content = content.replace(
+    /  useLoadDsStyles\(\n    "https:\/\/[^"]+",\n  \);\n/,
+    "",
+  );
+  content = content.replace(
+    /  useLoadDsStyles\("https:\/\/[^"]+"\);\n/,
+    "",
+  );
 
   // Ensure package import uses current URL
   content = content.replace(
@@ -99,20 +110,8 @@ for (const filePath of framerFiles) {
     },
   );
 
-  // Prepend header + load-styles import
+  // Prepend header
   content = importBlock + content;
-
-  // Inject useDsStyles at the start of the default export function body
-  if (!content.includes("useDsStyles()")) {
-    content = content.replace(
-      /useLoadDsStyles\("https:\/\/[^"]+"\);\n/,
-      "",
-    );
-    content = content.replace(
-      /(export default function \w+\([^)]*\) \{)\n/,
-      `$1\n  useDsStyles();\n`,
-    );
-  }
 
   writeFileSync(filePath, content);
   console.log(`synced ${relative(root, filePath)}`);

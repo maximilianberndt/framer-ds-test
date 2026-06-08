@@ -1,7 +1,6 @@
 // Framer code component — URLs synced from src/framer/urls.js (run: pnpm sync:framer)
 // Copy into Framer (Assets → Code → +)
 
-import { useLoadDsStyles } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/src/framer/load-styles.js?external=react";
 import { Button as DSButton } from "https://esm.sh/gh/maximilianberndt/framer-ds-test@main/dist/framer-ds-test.js?external=react,react-dom";
 import { ControlType, addPropertyControls } from "framer";
 
@@ -12,9 +11,6 @@ import { ControlType, addPropertyControls } from "framer";
  * @framerSupportedLayoutHeight auto
  */
 export default function Button(props) {
-  useLoadDsStyles(
-    "https://cdn.jsdelivr.net/gh/maximilianberndt/framer-ds-test@main/dist/style.css",
-  );
   return <DSButton {...props} />;
 }
 
