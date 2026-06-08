@@ -37,9 +37,9 @@ declare module "framer" {
   export function useIsStaticRenderer(): boolean;
 }
 
-declare module "https://esm.sh/@maaax/framer-ds-test@0.1.0/style.css";
+declare module "https://esm.sh/@maaax/framer-ds-test@0.1.1/style.css";
 
-declare module "https://esm.sh/@maaax/framer-ds-test@0.1.0?external=react,react-dom" {
+declare module "https://esm.sh/@maaax/framer-ds-test@0.1.1?external=react,react-dom" {
   import type { ComponentType, ReactNode } from "react";
 
   export const Button: ComponentType<{
