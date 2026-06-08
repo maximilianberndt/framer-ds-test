@@ -53,7 +53,7 @@ for (const filePath of framerFiles) {
   );
 
   content = content.replace(
-    /^\/\/ Framer code component[^\n]*\n(?:\/\/ Replace VERSION[^\n]*\n)?/m,
+    /^\/\/ Framer code component[^\n]*\n(?:\/\/ Copy into Framer[^\n]*\n)*/m,
     "// Framer code component — URLs synced from src/framer/urls.js (run: pnpm sync:framer)\n// Copy into Framer (Assets → Code → +)\n",
   );
   content = content.replace(

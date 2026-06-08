@@ -1,8 +1,8 @@
 // Framer code component — URLs synced from src/framer/urls.js (run: pnpm sync:framer)
 // Copy into Framer (Assets → Code → +)
 
-import "https://esm.sh/framer-ds-test@0.1.0/style.css";
-import { Badge as DSBadge } from "https://esm.sh/framer-ds-test@0.1.0?external=react,react-dom";
+import "https://esm.sh/@maaax/framer-ds-test@0.1.0/style.css";
+import { Badge as DSBadge } from "https://esm.sh/@maaax/framer-ds-test@0.1.0?external=react,react-dom";
 import { ControlType, addPropertyControls } from "framer";
 
 /**

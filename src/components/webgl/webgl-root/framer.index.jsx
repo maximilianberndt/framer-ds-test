@@ -3,8 +3,8 @@
 // Place a single WebglRoot on the page; pair with Shape components.
 // Replace VERSION with your published semver after `npm publish`.
 
-import "https://esm.sh/framer-ds-test@0.1.0/style.css";
-import { WebglRoot as DSWebglRoot } from "https://esm.sh/framer-ds-test@0.1.0?external=react,react-dom";
+import "https://esm.sh/@maaax/framer-ds-test@0.1.0/style.css";
+import { WebglRoot as DSWebglRoot } from "https://esm.sh/@maaax/framer-ds-test@0.1.0?external=react,react-dom";
 import { useIsStaticRenderer } from "framer";
 
 /**

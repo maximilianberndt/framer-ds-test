@@ -2,8 +2,8 @@
 // Copy into Framer (Assets → Code → +)
 // Requires WebglRoot on the same page.
 
-import "https://esm.sh/framer-ds-test@0.1.0/style.css";
-import { Shape as DSShape } from "https://esm.sh/framer-ds-test@0.1.0?external=react,react-dom";
+import "https://esm.sh/@maaax/framer-ds-test@0.1.0/style.css";
+import { Shape as DSShape } from "https://esm.sh/@maaax/framer-ds-test@0.1.0?external=react,react-dom";
 import { ControlType, addPropertyControls, useIsStaticRenderer } from "framer";
 
 /**
